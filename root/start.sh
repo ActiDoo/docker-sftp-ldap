@@ -73,9 +73,9 @@ fi
 mkdir -p /etc/ssh_keys
 chmod 0755 /etc/ssh_keys
 
-setSSSDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
-setSSSDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
-setSSSDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
+setSSHDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
+setSSHDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
+setSSHDConfig '^#HostKey /etc/ssh/' "HostKey /etc/ssh_keys/"
 
 # Generate unique ssh keys for this container, if needed
 if [ ! -f /etc/ssh_keys/ssh_host_ecdsa_key ]; then
