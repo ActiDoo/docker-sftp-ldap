@@ -1,12 +1,12 @@
-FROM debian:stretch
-MAINTAINER Pierre GINDRAUD <pgindraud@gmail.com>
+FROM debian:buster
+MAINTAINER ActiDoo <info@actidoo.com>
 
 ENV LDAP_URI=ldap://ldap.host.net/ \
     LDAP_BASE=dc=example,dc=com \
     LDAP_TLS_STARTTLS=false \
     LDAP_HOMEDIR=%u \
     LDAP_ATTR_SSHPUBLICKEY=sshPublicKey \
-    SFTP_CHROOT=/data
+    SFTP_CHROOT=/sftp_data
 #   LDAP_BASE_USER=cn=users,dc=example,dc=com
 #   LDAP_BASE_GROUP=cn=groups,dc=example,dc=com
 #   LDAP_BIND_USER=cn=sssd,dc=example,dc=net
@@ -15,22 +15,29 @@ ENV LDAP_URI=ldap://ldap.host.net/ \
 #   LDAP_TLS_CERT=/etc/ssl/cert.crt
 #   LDAP_TLS_KEY=/etc/ssl/cert.key
 
+# Add mysecureshell repository
+
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" \
+     -o Dpkg::Options::="--force-confold" install \
+      mysecureshell \
+      whois \
+      procps \
+      openssh-server \
       libnss-sss \
       libpam-sss \
       openssh-server \
       openssh-sftp-server \
       sssd-ldap \
       supervisor && \
-
 # Clean dependencies
     apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* && \
 # Remove default debian keys
     rm -f /etc/ssh/ssh_host_*key* && \
     mkdir /var/run/sshd && chmod 0755 /var/run/sshd && \
 # Prepare data dir
-    mkdir -p /data && \
+    mkdir -p /sftp_data && \
 # Configure sshd
     sed -i 's|^AuthorizedKeysFile|#AuthorizedKeysFile|' /etc/ssh/sshd_config && \
     echo 'AuthorizedKeysFile /dev/null' >> /etc/ssh/sshd_config && \
@@ -43,13 +50,13 @@ RUN apt-get update && apt-get install -y \
 # copy local files
 COPY root/ /
 
-RUN chown root:root /data && \
-    chmod 755 /data && \
+RUN chown root:root /sftp_data && \
+    chmod 755 /sftp_data && \
     chmod 600 /etc/sssd/sssd.conf && \
     chmod +x /start.sh
 
 EXPOSE 22
-VOLUME ["/data"]
-WORKDIR /data
+VOLUME ["/sftp_data"]
+WORKDIR /sftp_data
 
 CMD ["/start.sh"]

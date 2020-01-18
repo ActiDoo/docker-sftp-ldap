@@ -1,0 +1,13 @@
+
+<Default>
+        StayAtHome              true    #limit client to his home
+        VirtualChroot           true    #fake a chroot to the home account
+        Home                    /sftp_data/     #overrite home of the user but if you want you can use
+                                                #       environment variable (ie: Home /home/$USER)
+        IdleTimeOut             5m      #(in second) deconnect client is idle too long time
+        ResolveIP               false   #resolve ip to dns
+        HideNoAccess            true    #Hide file/directory which user has no access
+        ForceRights             0660 0770
+
+        ShowLinksAsLinks        false   #show links as their destinations
+</Default>
