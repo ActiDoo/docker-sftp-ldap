@@ -57,6 +57,6 @@ RUN chown root:root /sftp_data && \
 
 EXPOSE 22
 VOLUME ["/sftp_data", "/etc/ssh_keys"]
-WORKDIR /sftp_data
+WORKDIR /
 
 CMD ["/start.sh"]
