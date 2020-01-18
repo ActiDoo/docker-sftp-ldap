@@ -21,6 +21,7 @@ ENV LDAP_URI=ldap://ldap.host.net/ \
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" \
      -o Dpkg::Options::="--force-confold" install \
+      acl \
       mysecureshell \
       whois \
       procps \
