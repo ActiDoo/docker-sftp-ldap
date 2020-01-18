@@ -22,7 +22,6 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" \
      -o Dpkg::Options::="--force-confold" install \
       acl \
-      mysecureshell \
       whois \
       procps \
       openssh-server \
@@ -31,6 +30,9 @@ RUN apt-get update && \
       openssh-server \
       openssh-sftp-server \
       sssd-ldap \
+      git-core \
+      libacl1-dev\
+      build-essential\
       supervisor && \
 # Clean dependencies
     apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* && \
@@ -46,7 +48,13 @@ RUN apt-get update && \
     echo 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys' >> /etc/ssh/sshd_config && \
     sed -i 's|/usr/lib/openssh/sftp-server$|/usr/bin/mysecureshell -c sftp-server|' /etc/ssh/sshd_config && \
     echo 'ForceCommand internal-sftp' >> /etc/ssh/sshd_config && \
-    echo 'ChrootDirectory SFTP_CHROOT' >> /etc/ssh/sshd_config
+    echo 'ChrootDirectory SFTP_CHROOT' >> /etc/ssh/sshd_config && \
+    cd /root && \
+    git clone https://github.com/mysecureshell/mysecureshell && \
+    cd mysecureshell && \
+    ./configure --with-logcolor=yes && \
+    make all && \
+    make install
 
 # copy local files
 COPY root/ /
