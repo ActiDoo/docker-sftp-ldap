@@ -47,8 +47,8 @@ RUN apt-get update && \
     echo 'AuthorizedKeysCommandUser nobody' >> /etc/ssh/sshd_config && \
     echo 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys' >> /etc/ssh/sshd_config && \
     sed -i 's|/usr/lib/openssh/sftp-server$|/usr/bin/mysecureshell -c sftp-server|' /etc/ssh/sshd_config && \
-    echo 'ForceCommand internal-sftp' >> /etc/ssh/sshd_config && \
-    echo 'ChrootDirectory SFTP_CHROOT' >> /etc/ssh/sshd_config && \
+#    echo 'ForceCommand internal-sftp' >> /etc/ssh/sshd_config && \
+#    echo 'ChrootDirectory SFTP_CHROOT' >> /etc/ssh/sshd_config && \
     cd /root && \
     git clone https://github.com/mysecureshell/mysecureshell && \
     cd mysecureshell && \
