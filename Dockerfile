@@ -4,7 +4,7 @@ MAINTAINER ActiDoo <info@actidoo.com>
 ENV LDAP_URI=ldap://ldap.host.net/ \
     LDAP_BASE=dc=example,dc=com \
     LDAP_TLS_STARTTLS=false \
-    LDAP_HOMEDIR=%u \
+    LDAP_HOMEDIR=/home/%u \
     LDAP_ATTR_SSHPUBLICKEY=sshPublicKey \
     SFTP_CHROOT=/sftp_data
 #   LDAP_BASE_USER=cn=users,dc=example,dc=com
@@ -54,7 +54,8 @@ RUN apt-get update && \
     cd mysecureshell && \
     ./configure --with-logcolor=yes && \
     make all && \
-    make install
+    make install && \
+    chmod 4755 /usr/bin/mysecureshell
 
 # copy local files
 COPY root/ /
